@@ -6,6 +6,8 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -39,6 +41,9 @@ public class MainActivity extends Activity implements SensorEventListener{
     private TextView heightValue;
     private TextView speedValue;
     private final double g = 9.8;
+
+    private SoundPool fall;
+    private SoundPool hit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +101,11 @@ public class MainActivity extends Activity implements SensorEventListener{
         hangtimeValue.setTypeface(tf);
         speedValue.setTypeface(tf);
         heightValue.setTypeface(tf);
+
+        fall = new SoundPool(10, AudioManager.STREAM_SYSTEM,5);
+        fall.load(this,R.raw.fall,1);
+        hit = new SoundPool(10,AudioManager.STREAM_SYSTEM,5);
+        hit.load(this,R.raw.hit,1);
     }
 
 
@@ -138,6 +148,7 @@ public class MainActivity extends Activity implements SensorEventListener{
                     startTime = System.currentTimeMillis();
                     //Toast.makeText(this," "+startTime,Toast.LENGTH_SHORT).show();
                     flag = true;
+                    fall.play(1,1,1,0,0,1);
                 }
                 if(flag && lengthVector > 8){
                     long endTime = System.currentTimeMillis();
@@ -150,6 +161,7 @@ public class MainActivity extends Activity implements SensorEventListener{
                     hangtimeValue.setText(result);
                     heightValue.setText(height);
                     speedValue.setText(speed);
+                    hit.play(1,1,1,0,0,1);
                     flag = false;
                 }
                 break;
